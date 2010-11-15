@@ -1,6 +1,6 @@
 /*
 *       timer.js
-*   implementation provided by Steven Parkes
+*
 */
 
 //private
