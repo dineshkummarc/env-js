@@ -97,8 +97,8 @@ var __elementPopped__ = function(ns, name, node){
                                     }
                                     try{
                                         if (node.src && node.src.length > 0){
-                                            //console.log("getting content document for (i)frame from %s", node.src);
-                                            Envjs.loadFrame(node, Envjs.uri(node.src));
+                                            //console.log("getting content document for (i)frame from %s", Envjs.uri(node.src, doc.baseURI));
+                                            Envjs.loadFrame(node, Envjs.uri(node.src, doc.baseURI));
                                             event = node.contentDocument.createEvent('HTMLEvents');
                                             event.initEvent("load", false, false);
                                             node.dispatchEvent( event, false );
