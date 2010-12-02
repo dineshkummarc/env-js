@@ -15,6 +15,12 @@ __extend__(HTMLImageElement.prototype, {
     set alt(value){
         this.setAttribute('alt', value);
     },
+    get complete(){
+        return this.getAttribute('complete') || '';
+    },
+    set complete(value){
+        this.setAttribute('complete', value);
+    },
     get height(){
         return parseInt(this.getAttribute('height'), 10) || 0;
     },
@@ -72,6 +78,7 @@ Image = function(width, height) {
     this.width = parseInt(width, 10) || 0;
     this.height = parseInt(height, 10) || 0;
     this.nodeName = 'IMG';
+    this.complete = true;
 };
 Image.prototype = new HTMLImageElement();
 
@@ -100,12 +107,14 @@ Image.prototype = new HTMLImageElement();
  */
 __loadImage__ = function(node, value) {
     var event;
+    node.complete = false;
     if (value && (!Envjs.loadImage ||
                   (Envjs.loadImage &&
                    Envjs.loadImage(node, value)))) {
         // value has to be something (easy)
         // if the user-land API doesn't exist
         // Or if the API exists and it returns true, then ok:
+        node.complete = true;
         event = document.createEvent('Events');
         event.initEvent('load');
     } else {
