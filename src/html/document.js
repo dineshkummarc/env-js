@@ -11,7 +11,7 @@ HTMLDocument = function(implementation, ownerWindow, referrer) {
     Document.apply(this, arguments);
     this.referrer = referrer || '';
     this.baseURI = "about:blank";
-    this.ownerWindow = ownerWindow;
+    this.defaultView = this.ownerWindow = ownerWindow;
 };
 
 HTMLDocument.prototype = new Document();
@@ -447,7 +447,7 @@ Aspect.around({
                         try{
                             if (node.src && node.src.length > 0){
                                 //console.log("getting content document for (i)frame from %s", node.src);
-                                Envjs.loadFrame(node, Envjs.uri(node.src, doc.baseURI));
+                                Envjs.loadFrame(node, Envjs.uri(node.src, doc.baseURI), doc.defaultView);
                                 event = node.contentDocument.createEvent('HTMLEvents');
                                 event.initEvent("load", false, false);
                                 node.dispatchEvent( event, false );

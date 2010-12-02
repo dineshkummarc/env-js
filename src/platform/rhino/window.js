@@ -17,16 +17,19 @@ Envjs.lang           = java.lang.System.getProperty("user.lang");
  * @param {Object} frameElement
  * @param {Object} url
  */
-Envjs.loadFrame = function(frame, url){
+Envjs.loadFrame = function(frame, url, parent){
     try {
         if(frame.contentWindow){
             //mark for garbage collection
             frame.contentWindow = null;
         }
+        if (typeof(parent) == 'undefined') {
+          parent = window;
+        }
 
         //create a new scope for the window proxy
         frame.contentWindow = Envjs.proxy();
-        new Window(frame.contentWindow, window);
+        new Window(frame.contentWindow, parent);
 
         //I dont think frames load asynchronously in firefox
         //and I think the tests have verified this but for

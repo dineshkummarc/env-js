@@ -30,6 +30,7 @@ Document = function(implementation, docParentWindow) {
     this.ownerDocument = null;
 
     this.importing = false;
+
 };
 
 Document.prototype = new Node();
@@ -219,11 +220,6 @@ __extend__(Document.prototype,{
     },
     toString: function(){
         return "[object XMLDocument]";
-    },
-    get defaultView(){
-        return { getComputedStyle: function(elem){
-            return window.getComputedStyle(elem);
-        }};
     },
 });
 
