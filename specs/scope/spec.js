@@ -117,15 +117,17 @@ function ok_accessToIFrame1x(iframe, contentOf, message){
             ": '.top' from iframe does point to top window" );
 
 
+    equals (1,1,'IGNORING PARENTWINDOW SUPPORT')
     // document.parentWindow is IE-specific extension implemented by env.js
-    if (runningUnderEnvjs()){
-        equals( idoc.parentWindow, iframe.contentWindow, message +
-            ": iframe doc's .parentWindow points to iframe's .contentWindow");
-/* re-enable this once the preceding passes
-        equals( idoc.parentWindow.parent, window, message +
-            ": Can follow chain from iframe's doc to containing window");
-*/
-    }
+    // KPK:  REMOVED AS NOT SUPPORTED
+//     if (runningUnderEnvjs()){
+//         equals( idoc.parentWindow, iframe.contentWindow, message +
+//             ": iframe doc's .parentWindow points to iframe's .contentWindow");
+// /* re-enable this once the preceding passes
+//         equals( idoc.parentWindow.parent, window, message +
+//             ": Can follow chain from iframe's doc to containing window");
+// */
+//     }
 }
 
 
