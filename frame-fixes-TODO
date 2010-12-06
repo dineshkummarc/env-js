@@ -1,0 +1,46 @@
+I've made a few fixes to allow more of the test cases to run, but there are still significant scoping issues when using iframes, particularly nested iframes.
+
+There are several ways to listen for onload events of iframes.  The container window can add listeners via addEventListener and onload.  The frame itself can use inline statements to add onload events to it's own window object, or can just run inline scripts itself as it loads; it might have inline scripts entered straight into the body tag too.
+These can be added at various times.  They might get added before or after the src is assigned to the iframe, or the iframe is added to the main document node.  They should only fire when added to the document.
+
+This is all quite complicated to test for and fix.
+
+I think there are two core issues:
+
+1) There are primary scoping issues.  An iframe is created with a completely new variable context (in platform/rhino/window.js Envjs.proxy).  But it doesn't seem to add all the Envjs extensions to that context.  That's a problem.  And, often, functions seem to refer to a global window object.  That's no good if you're working within an iframe's context.
+The solution:  more tests, more fixes
+Look for setTimeout and Image in iframes.
+
+2) Envjs doesn't follow the same execution thread as a browser.  In a browser, no actions I perform on a frame (event addition, adding to documents), will take effect until the current execution thread ends and the document has a chance to redraw/refresh.  In envjs, that doesn't happen - nodes are updated when you tell them.
+eg:
+{
+// create iframe
+// set src
+// add to document
+// add load event listener
+}
+-> works in browser, won't work in envjs
+
+{
+// create iframe
+// set src
+// add load event listener
+// add to document
+}
+-> works in both
+
+It's quite trivial to change our statement ordering to fix this, but means envjs won't run code without tweaks.  Bad.
+
+
+Additional:
+
+I've also found that events were stripped off the iframe as it was removed from a document fragment to be inserted into the document.  I've commented that line out.  That may have unintended consequences, but seems to let the onload events fire correctly.
+
+It would be better if envjs could actually load the images it's told to, rather than simply returning 'true'.  Even if it's not going to load it, it could check for the existence of the file.
+I had to disable our Scribe tracking because the images weren't loading correctly (I think due to the scoping issue above)
+
+Script nodes have to have the "type="text/javascript"" attribute on them - even though it's not required by the html5 spec.  Booo.
+
+It would be good to get it running in a browser using the rhino version, so we can use Firebug to debug.  Not sure how practical that is though.
+
+
