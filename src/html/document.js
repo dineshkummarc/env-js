@@ -542,7 +542,7 @@ Aspect.around({
                 //means listeners hang out way after(forever ;)) the node
                 //has been removed and gone out of scope.
                 //console.log('removing event listeners, %s', node, node.uuid);
-                node.removeEventListener('*', null, null);
+                //node.removeEventListener('*', null, null);
                 switch(node.tagName.toLowerCase()){
                 case 'frame':
                 case 'iframe':
